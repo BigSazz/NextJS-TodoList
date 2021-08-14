@@ -2,10 +2,10 @@ import React, { useState, useCallback } from "react"
 import { TrashIcon } from "@heroicons/react/solid"
 
 const Page = () => {
-    const [todo, setTodo] = useState([{}]);
+    const [todos, setTodos] = useState([{}]);
     const [value, setValue] = useState("");
 
-    const newArray = todo.filter(value => Object.keys(value).length !== 0);
+    const newArray = todos.filter(value => Object.keys(value).length !== 0);
 
     const handleChange = useCallback((e) => {
         setValue(e.target.value);
@@ -13,13 +13,15 @@ const Page = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!value) {
+            return null
+        }
         const data = {
             id: Date.now(),
             value,
             isCompleted: false
         }
-
-        setTodo([...newArray, data]);
+        setTodos([...newArray, data]);
         setValue("");
     };
 
@@ -32,15 +34,16 @@ const Page = () => {
         }
         const nextTodos = newArray.slice();
         nextTodos[findIndex] = nextTodo;
-        setTodo(nextTodos);
+        setTodos(nextTodos);
     }
 
     const deleteTodo = (id) => {
         const deleted = newArray.filter(item => item.id !== id);
-        setTodo(deleted);
+        setTodos(deleted);
     }
 
     const notCompleted = newArray.filter(item => !item.isCompleted).length;
+
     const numberOfTodos = newArray.length
 
     return (
